@@ -1,0 +1,61 @@
+<body>
+  <input type="text" placeholder="Add your TODO here"></input>
+  <button onclick="addTODO()">ADD</button>
+  <button onclick="deletefirstTodo()">Delete First TODO</button>
+  <button onclick="deleteLastTodo()">Delete Last TODO</button>
+  <div id="todos"></div>
+  <script>
+      let todos = [];
+      let idCounter = 0;
+
+      function addTODO() {
+          const input = document.querySelector("input");
+          todos.push({
+              title: input.value,
+              id: idCounter++
+          });
+          input.value = "";
+          render();
+      }
+
+      function deleteLastTodo() {
+          todos.splice(todos.length - 1, 1); // Removes the last todo
+          render();
+      }
+
+      function deletefirstTodo() {
+          todos.splice(0, 1); // Removes the first todo
+          render();
+      }
+
+      function delete1(id) {
+          todos = todos.filter(todo => todo.id !== id); // Removes the todo with the matching id
+          render();
+      }
+
+      function createTodoComponent(todo) {
+          const div = document.createElement("div");
+          const h1 = document.createElement("h1");
+          const button = document.createElement("button");
+
+          button.innerHTML = "DELETE";
+          button.setAttribute("data-id", todo.id); // Correctly use todo.id
+          button.onclick = function () {
+              delete1(todo.id); // Deletes the specific todo
+          };
+
+          h1.innerHTML = todo.title;
+          div.append(h1);
+          div.append(button);
+          return div;
+      }
+
+      function render() {
+          document.getElementById("todos").innerHTML = "";
+          for (let i = 0; i < todos.length; i++) {
+              const element = createTodoComponent(todos[i]); // Pass individual todo
+              document.querySelector("#todos").appendChild(element);
+          }
+      }
+  </script>
+</body>
